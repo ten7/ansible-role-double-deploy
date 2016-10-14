@@ -1,0 +1,29 @@
+---
+- name: move the files directory to wip
+  command: "mv {{ build_src_files_dir }} {{ build_dst_files_dir }}"
+  args:
+    creates: "{{ build_dst_files_dir }}"
+    removes: "{{ build_src_files_dir }}"
+  when: deploy_move_files
+- name: check if a backup web directory exists
+  stat:
+    path: "{{ deploy_dst_dir_path }}_old"
+  register: deploy_dst_dir
+- name: update the files directory permissions prior to deletion
+  command: "find {{ deploy_dst_dir_path }}_old -type d -exec chmod 755 {} \\;"
+  when: deploy_dst_dir.stat.exists
+- name: delete backup web directory if exists
+  file:
+    path: "{{ deploy_dst_dir_path }}_old"
+    state: absent
+  when: deploy_dst_dir.stat.exists
+- name: backup the old web directory
+  command: "mv {{ deploy_dst_dir_path }} {{ deploy_dst_dir_path }}_old"
+  args:
+    creates: "{{ deploy_dst_dir_path }}_old"
+    removes: "{{ deploy_dst_dir_path }}"
+- name: move the wip directory to the web directory
+  command: "mv {{ deploy_wip_dir_path }} {{ deploy_dst_dir_path }}"
+  args:
+    creates: "{{ deploy_dst_dir_path }}"
+    removes: "{{ deploy_wip_dir_path }}"

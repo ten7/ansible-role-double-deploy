@@ -1,0 +1,26 @@
+---
+- name: delete the wip directory if it already exists
+  file:
+    path: "{{ build_dst_dir_path }}"
+    state: absent
+- name: create wip directory
+  file:
+    path: "{{ build_dst_dir_path }}"
+    state: directory
+    owner: "{{ build_dst_dir_owner }}"
+    group: "{{ build_dst_dir_group }}"
+    mode: "{{ build_dst_dir_mode }}"
+- name: sync source directory to wip directory
+  command: "rsync -a {{ build_src_dir_path }}/ {{ build_dst_dir_path }}"
+- name: create the files directory
+  file:
+    path: "{{ build_dst_files_dir }}"
+    state: directory
+    owner: "{{ build_dst_files_dir_owner }}"
+    group: "{{ build_dst_files_dir_group }}"
+    mode: "{{ build_dst_files_dir_mode }}"
+- name: sync the files directory to wip
+  synchronize:
+    src: "{{ build_src_files_dir }}"
+    dest: "{{ build_dst_files_dir }}"
+  when: build_sync_files

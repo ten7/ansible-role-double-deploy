@@ -1,0 +1,4 @@
+---
+build_dst_files_dir_owner: "{{ build_dst_dir_owner }}"
+build_dst_files_dir_group: "{{ build_dst_dir_group }}"
+build_dst_files_dir_mode: "{{ build_dst_dir_mode }}"
