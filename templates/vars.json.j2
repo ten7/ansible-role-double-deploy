@@ -1,0 +1,9 @@
+{
+  db_name: "{{ db_name }}",
+  db_host: "{{ db_host | default('127.0.0.1') }}",
+  db_port: "{{ db_port | default('3306') }}",
+  db_user: "{{ db_user }}",
+  db_password: "{{ db_password }}",
+  offsite_backup_key: "{{ offsite_backup_key }}",
+  offsite_backup_secret: "{{ offsite_backup_secret }}"
+}

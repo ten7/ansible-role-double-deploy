@@ -1,29 +1,41 @@
 ---
-- name: move the files directory to wip
-  command: "mv {{ build_src_files_dir }} {{ build_dst_files_dir }}"
-  args:
-    creates: "{{ build_dst_files_dir }}"
-    removes: "{{ build_src_files_dir }}"
-  when: deploy_move_files
 - name: check if a backup web directory exists
   stat:
-    path: "{{ deploy_dst_dir_path }}_old"
-  register: deploy_dst_dir
+    path: "{{ web_dir }}_old"
+  register: web_dir_stat
 - name: update the files directory permissions prior to deletion
-  command: "find {{ deploy_dst_dir_path }}_old -type d -exec chmod 755 {} \\;"
-  when: deploy_dst_dir.stat.exists
+  command: "find {{ web_dir }}_old -type d -exec chmod 755 {} \\;"
+  when: web_dir_stat.stat.exists
 - name: delete backup web directory if exists
   file:
-    path: "{{ deploy_dst_dir_path }}_old"
+    path: "{{ web_dir }}_old"
     state: absent
-  when: deploy_dst_dir.stat.exists
-- name: backup the old web directory
-  command: "mv {{ deploy_dst_dir_path }} {{ deploy_dst_dir_path }}_old"
+  when: web_dir_stat.stat.exists
+- name: backup the web directory
+  command: "mv {{ web_dir }} {{ web_dir }}_old"
   args:
-    creates: "{{ deploy_dst_dir_path }}_old"
-    removes: "{{ deploy_dst_dir_path }}"
-- name: move the wip directory to the web directory
-  command: "mv {{ deploy_wip_dir_path }} {{ deploy_dst_dir_path }}"
+    creates: "{{ web_dir }}_old"
+    removes: "{{ web_dir }}"
+- name: move the build directory to the web directory
+  command: "mv {{ build_dir }} {{ web_dir }}"
   args:
-    creates: "{{ deploy_dst_dir_path }}"
-    removes: "{{ deploy_wip_dir_path }}"
+    creates: "{{ web_dir }}"
+    removes: "{{ build_dir }}"
+- name: Add Drupal to cron
+  cron:
+    name: "{{ drupal_cron_name }}"
+    state: present
+    hour: "{{ drupal_cron_hour }}"
+    minute: "{{ drupal_cron_minute }}"
+    job: "/usr/bin/drush --root={{ web_dir | expanduser }} --uri={{ drupal_cron_url }} cron"
+  when: drupal_cron_url is defined
+- name: Add offsite backup to cron
+  cron:
+    name: "{{ offsite_backup_cron_name }}"
+    state: present
+    hour: "{{ offsite_backup_cron_hour }}"
+    minute: "{{ offsite_backup_cron_minute }}"
+    day: "{{ offsite_backup_cron_day }}"
+    job: >
+      /usr/local/bin/ansible-playbook -i {{ ansible_deploy_dir }}/inventories/{{ t7_env }} -e "@{{ ansible_deploy_dir }}/vars.json" {{ ansible_deploy_dir }}/offsite-backup.yml
+  when: offsite_backup_cron_name is defined
