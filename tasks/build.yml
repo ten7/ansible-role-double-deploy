@@ -5,10 +5,12 @@
     dest: "{{ ansible_deploy_dir }}/"
     recursive: yes
     delete: yes
+  when: ansible_deploy_dir is defined
 - name: Dump all variables to a var file.
   template:
     src: templates/vars.json.j2
     dest: "{{ ansible_deploy_dir }}/vars.json"
+  when: ansible_deploy_dir is defined
 - name: Delete the build directory
   file:
     path: "{{ build_dir }}"
