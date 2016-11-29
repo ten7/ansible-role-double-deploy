@@ -27,7 +27,7 @@
     state: present
     hour: "{{ drupal_cron_hour }}"
     minute: "{{ drupal_cron_minute }}"
-    job: "/usr/bin/drush --root={{ web_dir | expanduser }} --uri={{ drupal_cron_url }} cron"
+    job: "{{ drupal_cron_drush_path }} --root={{ web_dir | expanduser }} --uri={{ drupal_cron_url }} cron"
   when: drupal_cron_url is defined
 - name: Add offsite backup to cron
   cron:
