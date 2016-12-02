@@ -1,3 +1,4 @@
 ---
 git_dir_siteroot: "{{ git_dir }}/src"
 drupal_cron_drush_path: "/usr/bin/drush"
+drupal_cron_web_path: "{{ web_dir | expanduser }}"
