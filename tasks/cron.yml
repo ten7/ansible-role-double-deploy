@@ -16,5 +16,5 @@
     minute: "{{ offsite_backup_cron_minute }}"
     day: "{{ offsite_backup_cron_day }}"
     job: >
-      /usr/local/bin/ansible-playbook -i {{ ansible_deploy_dir }}/inventories/{{ t7_env }} -e "@{{ ansible_deploy_dir }}/vars.json" {{ ansible_deploy_dir }}/offsite-backup.yml
+      {{ offsite_backup_ansible_playbook_path }} -i {{ ansible_deploy_dir }}/inventories/{{ t7_env }} -e "@{{ ansible_deploy_dir }}/vars.json" {{ ansible_deploy_dir }}/offsite-backup.yml
   when: offsite_backup_cron_name is defined
