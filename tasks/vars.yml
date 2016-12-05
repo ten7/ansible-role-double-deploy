@@ -1,0 +1,13 @@
+---
+- name: Sync the ansible directory
+  synchronize:
+    src: "{{ git_dir }}/ansible/"
+    dest: "{{ ansible_deploy_dir }}/"
+    recursive: yes
+    delete: yes
+  when: ansible_deploy_dir is defined
+- name: Dump all variables to a var file.
+  template:
+    src: templates/vars.json.j2
+    dest: "{{ ansible_deploy_dir }}/vars.json"
+  when: ansible_deploy_dir is defined

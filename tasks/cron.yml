@@ -1,0 +1,20 @@
+---
+- name: Add Drupal to cron
+  cron:
+    name: "{{ drupal_cron_name }}"
+    state: "{{ {true: 'present', false: 'absent'}[drupal_cron_present] | default('present') }}"
+    hour: "{{ drupal_cron_hour }}"
+    minute: "{{ drupal_cron_minute }}"
+    job: "{{ drupal_cron_drush_path }} --root={{ drupal_cron_web_path }} --uri={{ drupal_cron_url }} cron"
+    disabled: "{{ drupal_cron_disabled }}"
+  when: drupal_cron_url is defined
+- name: Add offsite backup to cron
+  cron:
+    name: "{{ offsite_backup_cron_name }}"
+    state: present
+    hour: "{{ offsite_backup_cron_hour }}"
+    minute: "{{ offsite_backup_cron_minute }}"
+    day: "{{ offsite_backup_cron_day }}"
+    job: >
+      /usr/local/bin/ansible-playbook -i {{ ansible_deploy_dir }}/inventories/{{ t7_env }} -e "@{{ ansible_deploy_dir }}/vars.json" {{ ansible_deploy_dir }}/offsite-backup.yml
+  when: offsite_backup_cron_name is defined
