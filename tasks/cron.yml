@@ -11,10 +11,11 @@
 - name: Add offsite backup to cron
   cron:
     name: "{{ offsite_backup_cron_name }}"
-    state: present
+    state: "{{ {true: 'present', false: 'absent'}[offsite_cron_present] | default('present') }}"
     hour: "{{ offsite_backup_cron_hour }}"
     minute: "{{ offsite_backup_cron_minute }}"
     day: "{{ offsite_backup_cron_day }}"
     job: >
       {{ offsite_backup_ansible_playbook_path }} -i {{ ansible_deploy_dir }}/inventories/{{ t7_env }} -e "@{{ ansible_deploy_dir }}/vars.json" {{ ansible_deploy_dir }}/offsite-backup.yml
+    disabled: "{{ offsite_cron_disabled }}"
   when: offsite_backup_cron_name is defined
