@@ -13,4 +13,4 @@ galaxy_info:
     - "s3"
     - "backup"
 dependencies:
-  - { role: drupal-backup }
+  - { role: ten7.drupal-backup }
