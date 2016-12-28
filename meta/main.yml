@@ -14,3 +14,4 @@ galaxy_info:
     - "backup"
 dependencies:
   - src: 'ten7.drupal-backup'
+    name: 'ten7.drupal-backup'
