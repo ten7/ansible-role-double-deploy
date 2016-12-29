@@ -10,8 +10,3 @@ galaxy_info:
    - any
   galaxy_tags:
     - "drupal"
-    - "s3"
-    - "backup"
-dependencies:
-  - src: 'ten7.drupal-backup'
-    name: 'ten7.drupal-backup'
