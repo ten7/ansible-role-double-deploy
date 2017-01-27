@@ -1,4 +1,15 @@
 ---
+- name: Set the cron USER variable
+  cron:
+    name: "USER"
+    env: yes
+    value: "{{ drupal_cron_user }}"
+- name: Set the cron MAILTO variable
+  cron:
+    name: "MAILTO"
+    env: yes
+    value: "{{ drupal_cron_mailto | default('') }}"
+  when: drupal_cron_mailto is defined
 - name: Add Drupal to cron
   cron:
     name: "{{ drupal_cron_name }}"
