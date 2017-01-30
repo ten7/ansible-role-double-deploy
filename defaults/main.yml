@@ -4,7 +4,7 @@ drupal_cron_drush_path: "/usr/bin/drush"
 drupal_cron_web_path: "{{ web_dir | expanduser }}"
 drupal_cron_disabled: false
 drupal_cron_present: true
-drupal_cron_user: "{{ ansible_ssh_user | lookup('env','USER') }}"
+drupal_cron_user: "{{ ansible_ssh_user | default(lookup('env', 'USER')) }}"
 # drupal_cron_mailto: some@kind.of.email
 offsite_backup_ansible_playbook_path: "/usr/local/bin/ansible-playbook"
 offsite_cron_disabled: false
