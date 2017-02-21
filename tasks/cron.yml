@@ -18,7 +18,7 @@
   with_items:
     - "TMP"
     - "TEMP"
-    - "TEMPDIR"
+    - "TMPDIR"
 - name: Add Drupal to cron
   cron:
     name: "{{ drupal_cron_name }}"
