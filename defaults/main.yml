@@ -8,8 +8,7 @@ drupal_cron_user: "{{ ansible_ssh_user | default(lookup('env', 'USER')) }}"
 # drupal_cron_mailto: some@kind.of.email
 drupal_cron_temp: "/tmp/{{ drupal_cron_user }}"
 drupal_dir_owner: "{{ ansible_ssh_user | default(lookup('env', 'USER')) }}"
-drupal_dir_group: "{{ ansible_ssh_user | default(lookup('env', 'USER')) }}"
-drupal_dir_mode: "0775"
+drupal_dir_group: "{{ lookup('pipe', 'id -gn') | default(drupal_dir_owner) }}"
 offsite_backup_ansible_playbook_path: "/usr/local/bin/ansible-playbook"
 offsite_cron_disabled: false
 offsite_cron_present: true
