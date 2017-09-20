@@ -17,14 +17,14 @@
     state: directory
     mode: "0755"
     owner: "{{ drupal_dir_owner }}"
-    group: "{{ drupal_dir_group }}"
+    group: "{{ drupal_dir_group | default(user_primary_group) }}"
 - name: Ensure the files directory exists
   file:
     state: directory
     path: "{{ files_dir }}"
     mode: "0775"
     owner: "{{ drupal_dir_owner }}"
-    group: "{{ drupal_dir_group }}"
+    group: "{{ drupal_dir_group | default(user_primary_group) }}"
 - name: Symlink files directory
   file:
     state: link
@@ -32,11 +32,11 @@
     dest: "{{ build_files_dir }}"
     mode: "0775"
     owner: "{{ drupal_dir_owner }}"
-    group: "{{ drupal_dir_group }}"
+    group: "{{ drupal_dir_group | default(user_primary_group) }}"
 - name: Create settings.ENVIRONMENT.php
   template:
     src: "{{ git_dir }}/src/sites/default/settings.{{ t7_env }}.php"
     dest: "{{ build_site_dir }}/settings.{{ t7_env }}.php"
     mode: "0755"
     owner: "{{ drupal_dir_owner }}"
-    group: "{{ drupal_dir_group }}"
+    group: "{{ drupal_dir_group | default(user_primary_group) }}"

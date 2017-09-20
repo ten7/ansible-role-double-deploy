@@ -1,0 +1,4 @@
+---
+- name: Get the user's primary group.
+  shell: "id -gn"
+  register: user_primary_group
