@@ -16,27 +16,37 @@
     path: "{{ build_site_dir }}"
     state: directory
     mode: "0755"
+- name: Set site directory owner and group
+  file:
+    path: "{{ build_site_dir }}"
+    state: directory
     owner: "{{ drupal_dir_owner }}"
-    group: "{{ drupal_dir_group | default(user_primary_group.stdout) }}"
-- name: Ensure the files directory exists
+    group: "{{ drupal_dir_group }}"
+  when:
+    - drupal_dir_owner is defined
+    - drupal_dir_group is defined
+- name: Create the files directory
   file:
     state: directory
     path: "{{ files_dir }}"
     mode: "0775"
+- name: Set the files directory owner and group
+  file:
+    state: directory
+    path: "{{ files_dir }}"
     owner: "{{ drupal_dir_owner }}"
-    group: "{{ drupal_dir_group | default(user_primary_group.stdout) }}"
+    group: "{{ drupal_dir_group }}"
+  when:
+    - drupal_dir_owner is defined
+    - drupal_dir_group is defined
 - name: Symlink files directory
   file:
     state: link
     src: "{{ files_dir }}"
     dest: "{{ build_files_dir }}"
     mode: "0775"
-    owner: "{{ drupal_dir_owner }}"
-    group: "{{ drupal_dir_group | default(user_primary_group.stdout) }}"
 - name: Create settings.ENVIRONMENT.php
   template:
     src: "{{ git_dir }}/src/sites/default/settings.{{ t7_env }}.php"
     dest: "{{ build_site_dir }}/settings.{{ t7_env }}.php"
     mode: "0755"
-    owner: "{{ drupal_dir_owner }}"
-    group: "{{ drupal_dir_group | default(user_primary_group.stdout) }}"

@@ -1,5 +1,4 @@
 ---
-- include: setup.yml
 - include: vars.yml
 - include: build.yml
 - include: deploy.yml
