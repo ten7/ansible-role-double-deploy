@@ -21,12 +21,20 @@
     - "TEMP"
     - "TMPDIR"
   when: drupal_cron_url is defined
+- name: Assemble the cron job command.
+  set_fact:
+    _drupal_cron_job: >
+      {{ drupal_cron_drush_path }} --root={{ drupal_cron_web_path }} --uri={{ drupal_cron_url }} cron
+      {% if drupal_cron_healthcheckio_url is defined %}
+      && curl -fsS --retry 3 {{ drupal_cron_healthcheckio_url }} > /dev/null
+      {% endif %}
+  when: drupal_cron_url is defined
 - name: Add Drupal to cron
   cron:
     name: "{{ drupal_cron_name }}"
     state: "{{ {true: 'present', false: 'absent'}[drupal_cron_present] | default('present') }}"
     hour: "{{ drupal_cron_hour }}"
     minute: "{{ drupal_cron_minute }}"
-    job: "{{ drupal_cron_drush_path }} --root={{ drupal_cron_web_path }} --uri={{ drupal_cron_url }} cron"
+    job: "{{ drupal_cron_job | default(_drupal_cron_job) }}"
     disabled: "{{ drupal_cron_disabled }}"
   when: drupal_cron_url is defined
