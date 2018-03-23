@@ -15,12 +15,12 @@
   cron:
     name: "{{ item }}"
     env: yes
-    value: "{{ drupal_cron_temp }}"
+    value: "{{ drupal_cron_temp | default('/tmp/' + drupal_cron_user) }}"
   with_items:
     - "TMP"
     - "TEMP"
     - "TMPDIR"
-  when: drupal_cron_url is defined
+  when: (drupal_cron_user is defined) or (drupal_cron_temp is defined)
 - name: Assemble the cron job command.
   set_fact:
     _drupal_cron_job: >
