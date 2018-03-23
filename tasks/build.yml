@@ -39,12 +39,14 @@
   when:
     - drupal_dir_owner is defined
     - drupal_dir_group is defined
+
+# We skip setting a mode here as not all mounts support it for links.
 - name: Symlink files directory
   file:
     state: link
     src: "{{ files_dir }}"
     dest: "{{ build_files_dir }}"
-    mode: "0775"
+    
 - name: Create settings.ENVIRONMENT.php
   template:
     src: "{{ git_dir }}/src/sites/default/settings.{{ t7_env }}.php"

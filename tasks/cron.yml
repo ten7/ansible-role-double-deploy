@@ -4,7 +4,7 @@
     name: "USER"
     env: yes
     value: "{{ drupal_cron_user }}"
-  when: drupal_cron_url is defined
+  when: drupal_cron_user is defined
 - name: Set the cron MAILTO variable
   cron:
     name: "MAILTO"
