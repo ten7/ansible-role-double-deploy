@@ -9,7 +9,7 @@
     state: directory
 - name: Copy from {{ git_dir }}/src/ to the build dir.
   synchronize:
-    src: "{{ git_dir }}/src/"
+    src: "{{ git_dir_siteroot }}/"
     dest: "{{ build_dir }}"
 - name: Set site directory permissions
   file:
@@ -46,9 +46,9 @@
     state: link
     src: "{{ files_dir }}"
     dest: "{{ build_files_dir }}"
-    
+
 - name: Create settings.ENVIRONMENT.php
   template:
-    src: "{{ git_dir }}/src/sites/default/settings.{{ t7_env }}.php"
+    src: "{{ git_dir_siteroot }}/sites/default/settings.{{ t7_env }}.php"
     dest: "{{ build_site_dir }}/settings.{{ t7_env }}.php"
     mode: "0755"
