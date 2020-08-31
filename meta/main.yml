@@ -1,9 +1,11 @@
 galaxy_info:
+  role_name: drupal_deploy
   author: socketwench
   description: A Drupal deploy role for TEN7 using the "double-deploy" method.
   company: TEN7
   license: license (GPLv3, CC-BY, etc)
   min_ansible_version: 2.0
+  github_branch: main
   platforms:
   - name: GenericLinux
   versions:
